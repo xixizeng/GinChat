@@ -1,0 +1,7 @@
+info:
+  contact: {}
+  description: 尝试swagger
+  title: Go-Web开发记录
+  version: 0.0.1
+paths: {}
+swagger: "2.0"

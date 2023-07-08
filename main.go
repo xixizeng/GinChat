@@ -5,6 +5,10 @@ import (
 	"ginchat/utils"
 )
 
+//@title Go-Web开发记录
+//@version 0.0.1
+//@description 尝试swagger
+
 func main() {
 	utils.InitConfig()
 	utils.InitMysql()

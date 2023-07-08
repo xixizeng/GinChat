@@ -1,12 +1,9 @@
 package service
 
-import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-)
+import "github.com/gin-gonic/gin"
 
 func GetIndex(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(200, gin.H{
 		"message": "welcome",
 	})
 }

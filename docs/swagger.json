@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "尝试swagger",
+        "title": "Go-Web开发记录",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "paths": {}
+}
