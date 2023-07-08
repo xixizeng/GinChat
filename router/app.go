@@ -7,6 +7,7 @@ import (
 
 func Router() *gin.Engine {
 	router := gin.Default()
-	router.GET("index", service.GetIndex)
+	router.GET("/index", service.GetIndex)
+	router.GET("/getuserlist", service.GetUserList)
 	return router
 }

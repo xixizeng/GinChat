@@ -1,4 +1,4 @@
-package test
+package main
 
 import (
 	"fmt"
@@ -13,8 +13,7 @@ type Product struct {
 	Price uint
 }
 
-func IntTest() {
-
+func main() {
 	dsn := "root:123456@tcp(127.0.0.1:3307)/ginchat?charset=utf8&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
