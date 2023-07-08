@@ -6,14 +6,14 @@ import (
 )
 
 // GetUserList
-// @Summary ping example
-// @Description do ping
-// @Tags example
+// @Summary 测试index
+// @Description 用来测试swagger
+// @Tags
 // @Accept json
 // @Produce json
-// @Success 200 {string} welcom
+// @Success 200 {string} welcome
 // @Fialure 500 {string} notwelcom
-// @Router /user/getUserListt [get]
+// @Router /user/getUserList [get]
 
 func GetUserList(c *gin.Context) {
 	data := models.GetUserList()
