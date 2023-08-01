@@ -8,15 +8,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @Summary 测试index
-// @Description 用来测试swagger
-// @Tags
-// @Accept json
-// @Produce json
-// @Success 200 {string} welcome
-// @Fialure 500 {string} notwelcom
-// @Router /index [get]
-
 func Router() *gin.Engine {
 
 	router := gin.Default()
@@ -24,6 +15,9 @@ func Router() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.GET("/index", service.GetIndex)
 	router.GET("/user/getUserList", service.GetUserList)
-
+	router.PUT("/user/createUser", service.CreateUser)
+	router.DELETE("/user/deleteUser", service.DeleteUser)
+	router.POST("/user/updateUser", service.UpdateUser)
+	router.POST("/user/findUserByNameAndPassword", service.FindUserByNameAndPassword)
 	return router
 }

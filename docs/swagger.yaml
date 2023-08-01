@@ -1,3 +1,49 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.UserBasic:
+    properties:
+      clientIp:
+        type: string
+      clientPort:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      deviceInfo:
+        type: string
+      email:
+        type: string
+      heartbeatTime:
+        type: integer
+      id:
+        type: integer
+      identity:
+        type: string
+      isLogout:
+        type: boolean
+      login-out_time:
+        type: integer
+      loginTime:
+        type: integer
+      name:
+        type: string
+      passWord:
+        type: string
+      phone:
+        type: string
+      salt:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -16,7 +62,75 @@ paths:
       summary: ping example
       tags:
       - testswag
-  /getuserlist:
+  /user/createUser:
+    put:
+      consumes:
+      - application/json
+      description: do ping
+      parameters:
+      - description: 用户名
+        in: query
+        name: name
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      - description: 确认密码
+        in: query
+        name: repassword
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户信息
+          schema:
+            $ref: '#/definitions/models.UserBasic'
+      summary: 新增用户
+      tags:
+      - 用户
+  /user/deleteUser:
+    delete:
+      consumes:
+      - application/json
+      description: do ping
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户信息
+          schema:
+            $ref: '#/definitions/models.UserBasic'
+      summary: 删除用户
+      tags:
+      - 用户
+  /user/findUserByNameAndPassword:
+    post:
+      description: do ping
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: password
+        in: query
+        name: password
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserBasic'
+      summary: 寻找用户
+      tags:
+      - 用户
+  /user/getUserList:
     get:
       consumes:
       - application/json
@@ -25,10 +139,43 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 用户信息
+          schema:
+            $ref: '#/definitions/models.UserBasic'
+      summary: 拉取所有用户
+      tags:
+      - 用户
+  /user/updateUser:
+    post:
+      description: do ping
+      parameters:
+      - description: id
+        in: formData
+        name: id
+        required: true
+        type: string
+      - description: name
+        in: formData
+        name: name
+        type: string
+      - description: password
+        in: formData
+        name: password
+        type: string
+      - description: phone
+        in: formData
+        name: phone
+        type: string
+      - description: email
+        in: formData
+        name: email
+        type: string
+      responses:
+        "200":
+          description: code","message"}
           schema:
             type: string
-      summary: ping example
+      summary: 修改用户
       tags:
       - 用户
 swagger: "2.0"
