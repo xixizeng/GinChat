@@ -32,3 +32,11 @@ func ToRegister(c *gin.Context) {
 	}
 	ind.Execute(c.Writer, "register")
 }
+
+func ToChat(c *gin.Context) {
+	ind, err := template.ParseFiles("views/chat/main.shtml")
+	if err != nil {
+		panic(err)
+	}
+	ind.Execute(c.Writer, "register")
+}

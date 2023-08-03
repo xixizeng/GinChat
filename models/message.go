@@ -41,6 +41,7 @@ var clientMap map[int64]*Node = make(map[int64]*Node, 0)
 // 读写锁
 var rwLocker sync.RWMutex
 
+// 需要：发送者ID，接收者ID,消息类型，发送的内容，发送类型
 func Chat(w http.ResponseWriter, r *http.Request) {
 	//1】 获取参数并校验合法性 校验token 等合法性
 	//token := query.Get("token")
