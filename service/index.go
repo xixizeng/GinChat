@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"text/template"
 )
 
 // @BasePath
@@ -17,5 +17,18 @@ import (
 // @Success 200 {string} Helloworld
 // @Router /example/index [get]
 func GetIndex(g *gin.Context) {
-	g.JSON(http.StatusOK, "helloworld")
+	ind, err := template.ParseFiles("index.html", "views/chat/head.html")
+	if err != nil {
+		panic(err)
+	}
+	ind.Execute(g.Writer, "index")
+	//g.JSON(http.StatusOK, "helloworld")
+}
+
+func ToRegister(c *gin.Context) {
+	ind, err := template.ParseFiles("views/user/register.html")
+	if err != nil {
+		panic(err)
+	}
+	ind.Execute(c.Writer, "register")
 }

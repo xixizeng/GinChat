@@ -6,9 +6,11 @@ import (
 	"ginchat/utils"
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	"math/rand"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // @BasePath
@@ -43,7 +45,7 @@ func GetUserList(g *gin.Context) {
 // @Router /user/createUser [put]
 func CreateUser(c *gin.Context) {
 
-	Name := c.Query("name")
+	Name := c.Request.FormValue("name")
 	data := models.FindUserByName(Name)
 	if data.Name != "" {
 		c.JSON(200, gin.H{
@@ -51,17 +53,18 @@ func CreateUser(c *gin.Context) {
 		})
 		return
 	}
-	password := c.Query("password")
-	repassword := c.Query("repassword")
+	password := c.PostForm("password")
+	repassword := c.PostForm("repassword")
+	fmt.Println()
 	if password == "" || Name == "" {
-		c.JSON(500, gin.H{
-			"message": "密码不能为空",
+		c.JSON(200, gin.H{
+			"message": "用户名或密码不能为空",
 		})
 		return
 	}
 
 	if password != repassword {
-		c.JSON(500, gin.H{
+		c.JSON(200, gin.H{
 			"message": "两次密码输入不一致",
 		})
 		return
@@ -73,6 +76,7 @@ func CreateUser(c *gin.Context) {
 	user.PassWord = utils.MakePassword(password, user.Salt)
 	models.CreateUser(user)
 	c.JSON(200, gin.H{
+		"code":    0,
 		"message": "新增用户成功!",
 	})
 }
@@ -166,8 +170,9 @@ func UpdateUser(c *gin.Context) {
 // @Success 200 {object} models.UserBasic
 // @Router /user/findUserByNameAndPassword [post]
 func FindUserByNameAndPassword(g *gin.Context) {
-	Name := g.Query("name")
-	PassWord := g.Query("password")
+	Name := g.PostForm("name")
+	PassWord := g.PostForm("password")
+	fmt.Println(Name, PassWord)
 	user := models.FindUserByName(Name)
 	if user.Name == "" {
 		g.JSON(http.StatusOK, gin.H{
@@ -200,4 +205,44 @@ func FindUserByNameAndPassword(g *gin.Context) {
 		"message": "登录成功",
 		"data":    user,
 	})
+}
+
+// 防止跨域站点的伪造请求
+var upGrade = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+
+		return true
+	},
+}
+
+func SenMsg(c *gin.Context) {
+	ws, err := upGrade.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer func(ws *websocket.Conn) {
+		err = ws.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(ws)
+	MsgHandler(ws, c)
+}
+
+func MsgHandler(ws *websocket.Conn, c *gin.Context) {
+	msg, err := utils.Subscribe(c, utils.PublishKey)
+	if err != nil {
+		panic(err)
+	}
+	tm := time.Now().Format("2006-01-02 15:04:05")
+	m := fmt.Sprintf("[ws][%s]:%s ", tm, msg)
+	ws.WriteMessage(1, []byte(m))
+	if err != nil {
+		panic(err)
+	}
+}
+
+func SenUserMsg(c *gin.Context) {
+	models.Chat(c.Writer, c.Request)
 }
