@@ -201,7 +201,7 @@ func FindUserByNameAndPassword(g *gin.Context) {
 	}
 
 	g.JSON(http.StatusOK, gin.H{
-		"code":    200,
+		"code":    0,
 		"message": "登录成功",
 		"data":    user,
 	})
@@ -245,4 +245,23 @@ func MsgHandler(ws *websocket.Conn, c *gin.Context) {
 
 func SenUserMsg(c *gin.Context) {
 	models.Chat(c.Writer, c.Request)
+}
+
+func SearchFriends(c *gin.Context) {
+	id, err := strconv.ParseUint(c.PostForm("userId"), 10, 64)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"code":    -1,
+			"message": "用户ID有误",
+		})
+		return
+	}
+	//c.JSON(500, gin.H{
+	//	"code":    -1,
+	//	"message": "获取用户关联消息成功",
+	//	"data":    models.SearchFriends(uint(id)),
+	//})
+	users := models.SearchFriends(uint(id))
+
+	utils.RespOkList(c.Writer, users, len(users))
 }

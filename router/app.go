@@ -18,11 +18,14 @@ func Router() *gin.Engine {
 	router.Static("/asset", "asset/")
 	router.StaticFile("/favicon.ico", "asset/images/favicon.ico")
 	router.LoadHTMLGlob("views/**/*")
+
 	//首页
 	router.GET("/", service.GetIndex)
 	router.GET("/index", service.GetIndex)
-
 	router.GET("/toRegister", service.ToRegister)
+	router.GET("/toChat", service.ToChat)
+	router.POST("/searchFriends", service.SearchFriends)
+
 	//用户模块
 	router.GET("/user/getUserList", service.GetUserList)
 	router.POST("/user/createUser", service.CreateUser)
